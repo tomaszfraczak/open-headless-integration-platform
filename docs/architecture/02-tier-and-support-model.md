@@ -1,0 +1,1 @@
+Definicja warstw: Tier A (Core), Tier B (Infrastruktura do wymiany), Tier C (Rozszerzenia klienta) oraz oficjalna macierz wsparcia (Support Matrix) . To najważniejszy plik biznesowy chroniący przed chaosem.
