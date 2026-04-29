@@ -1,48 +1,26 @@
 # Open Headless Integration Platform (OHIP) 🚀
 
-[cite_start]**Enterprise Integration Without Vendor Lock-In.** OHIP to nie jest po prostu kolejne oprogramowanie integracyjne[cite: 345]. [cite_start]To **Productized Enterprise Integration Operating Model**[cite: 10]. [cite_start]Jest to gotowa, rozwijalna i w pełni deklaratywna architektura integracyjna klasy enterprise, która pozwala organizacjom skrócić czas wdrożenia (*time-to-production*) z 6-12 miesięcy do zaledwie 2-6 tygodni [cite: 12, 33-38].
+[cite_start]**Enterprise Integration Without Vendor Lock-In.** OHIP nie jest po prostu "kolejnym narzędziem integracyjnym"[cite: 799]. [cite_start]To kompletny i gotowy do wdrożenia **Productized Enterprise Integration Operating Model**[cite: 801]. [cite_start]Platforma została zaprojektowana jako otwarta, oparta o Apache Camel alternatywa dla klasycznych rozwiązań iPaaS/ESB (takich jak MuleSoft, Boomi czy TIBCO)[cite: 797]. 
 
-## 💡 Dlaczego OHIP?
+[cite_start]Dzięki OHIP organizacje nie muszą budować architektury integracyjnej od zera — wdrażają sprawdzony standard operacyjny wolny od uzależnienia od zamkniętych ekosystemów[cite: 797, 798].
 
-[cite_start]Większość dzisiejszych organizacji mierzy się z silosami systemowymi, wysokimi kosztami utrzymania integracji oraz brakiem standaryzacji (observability i governance) [cite: 14-19]. Klasyczne rozwiązania typu iPaaS/ESB (takie jak MuleSoft, Boomi czy TIBCO) rozwiązują część tych problemów, ale generują nowe:
-* [cite_start]Astronomiczne koszty licencji [cite: 24-25].
-* [cite_start]Uzależnienie od dostawcy (Vendor Lock-in)[cite: 28].
-* [cite_start]Ograniczona elastyczność architektoniczna i narzucony zamknięty ekosystem[cite: 6, 27].
+## 💡 Rozwiązywany problem
 
-[cite_start]**OHIP eliminuje te problemy.** Dostarczamy gotowe assety wdrożeniowe, Infrastructure as Code, API management oraz sprawdzone wzorce (integration patterns), dzięki czemu nie budujesz platformy od zera — od razu wdrażasz gotowy, sprawdzony standard operacyjny[cite: 7]. [cite_start]Zyskujesz niezależność technologiczną, inwestując w dojrzałość inżynieryjną, a nie licencje[cite: 402].
+[cite_start]Współczesne organizacje często mierzą się z systemowymi silosami, brakiem standaryzacji (observability i governance) oraz wysokimi kosztami utrzymania integracji point-to-point[cite: 806, 807, 808, 809, 810]. [cite_start]Klasyczne platformy integracyjne rozwiązują te problemy, ale wprowadzają nowe: bardzo wysokie koszty licencji oraz uzależnienie od jednego dostawcy (vendor lock-in)[cite: 815, 816, 819].
 
-## 🏗️ Główne założenia techniczne (Core Principles)
+[cite_start]OHIP eliminuje te bariery, pozwalając na drastyczne skrócenie czasu wdrożenia integracji klasy enterprise (time-to-production) z 6–12 miesięcy do zaledwie 2–6 tygodni[cite: 821, 824, 826, 828].
 
-Nasza platforma została zaprojektowana na fundamencie najlepszych praktyk inżynierii chmurowej:
-* [cite_start]**API-first & Event-driven architecture:** Systemy komunikują się przez API, event streaming i messaging, a nie przez zamknięte środowiska vendorów [cite: 41-42, 54-60].
-* [cite_start]**Cloud-native & Headless:** Obsługa środowisk on-premise, cloud, hybrid oraz multi-cloud [cite: 46, 61-66].
-* [cite_start]**Golden Path Engineering:** Platforma narzuca właściwy sposób działania — od wdrażania CI/CD, po retry policies i circuit breakery [cite: 750-753].
-* [cite_start]**Observability & Security by Design:** Wbudowane polityki bezpieczeństwa (SSO, RBAC) i pełna widoczność metryk oraz logów jako standard, nie jako opcja [cite: 47-48].
-* [cite_start]**Built for Scale:** Architektura gotowa na burst traffic, event storms i wielodostępność (multi-tenancy) od pierwszego dnia [cite: 351-352].
+## 🏗️ Główne założenia platformy
 
-## 🛠️ Stack Technologiczny (Reference Architecture)
+[cite_start]Platforma OHIP funkcjonuje jako **Headless Integration Platform**[cite: 843]. Oznacza to, że:
+* [cite_start]Systemy komunikują się ze sobą natywnie poprzez API, event streaming oraz messaging, a nie przez zamknięty system vendora[cite: 845, 846, 847, 848, 851].
+* [cite_start]Dostarczamy gotowe, wielowarstwowe środowisko: od wbudowanego Infrastructure as Code, przez API management, po security baseline i observability[cite: 798].
+* [cite_start]Architektura wspiera każde środowisko uruchomieniowe: on-premise, public cloud, private cloud oraz hybrid/multi-cloud[cite: 853, 854, 855, 856, 857].
+* [cite_start]Całość projektowana jest zgodnie z zasadami API-first, event-driven oraz security by design[cite: 832, 833, 838].
 
-[cite_start]OHIP opiera się na sprawdzonych rozwiązaniach Open Source, oddzielając warstwę operacyjną (*Control Plane*) od wykonawczej (*Data Plane*) [cite: 944-953]:
+## 🚀 Dlaczego warto?
 
-* [cite_start]**Integration Runtime (Execution):** Apache Camel, Camel K, Camel Quarkus, Kubernetes [cite: 70-74].
-* [cite_start]**API Management & Access:** Apache APISIX / Kong OSS [cite: 111-113].
-* [cite_start]**Event & Messaging Backbone:** Apache Kafka, RabbitMQ [cite: 116-117].
-* [cite_start]**Security & Identity:** Keycloak, HashiCorp Vault, Open Policy Agent [cite: 140-143].
-* [cite_start]**Observability:** Prometheus, Grafana, Loki, OpenTelemetry, Tempo [cite: 146-150].
-* [cite_start]**Platform Delivery (IaC & GitOps):** Terraform, Helm, ArgoCD, GitHub Actions [cite: 89-93].
+Wybierając OHIP, nie kupujesz samej technologii. [cite_start]Kupujesz powtarzalny standard operacyjny, szybkość wdrożenia, wbudowane bezpieczeństwo i pełną niezależność od vendora[cite: 1124, 1125, 1126, 1127, 1130, 1133]. [cite_start]To **Enterprise Integration Without Vendor Prison**[cite: 1123].
 
-> [cite_start]**Uwaga na temat architektury:** Nie przywiązujemy się do konkretnych narzędzi, przywiązujemy się do *kontraktów* [cite: 770-771]. [cite_start]Jeśli Twój ekosystem posiada własnego brokera (np. IBM MQ) lub system IAM, a spełnia on zdefiniowane kontrakty integracyjne platformy, jest on natywnie wspierany [cite: 633-634].
-
-## 📖 Przewodnik po Platformie (Wkrótce)
-
-Zgodnie z filozofią "Platform as a Product", będziemy sukcesywnie udostępniać pełną dokumentację standardów (Naszą Konstytucję), która pokryje:
-1. **Core Architecture Principles** (Fundamenty).
-2. **Golden Path & Delivery Standards** (Jak budujemy i wdrażamy integracje).
-3. **Platform Operations & Observability** (Jak utrzymujemy platformę).
-4. **Security & Governance** (Jak zarządzamy kontrolą jakości i kosztami).
-
-## 🤝 Współpraca (Contributing)
-OHIP to standard, który rośnie dzięki społeczności. Repozytorium jest chronione regułami gwarantującymi stabilność (*Branch Protection*), ale zachęcamy do otwierania dyskusji (Issues) i proponowania zmian (Pull Requests). 
-
-## 📜 Licencja
-[Dodaj wybraną licencję, np. Apache License 2.0]
+---
+*Dokumentacja techniczna, szczegóły poszczególnych warstw oraz standardy architektoniczne pojawią się w tym repozytorium wkrótce.*
