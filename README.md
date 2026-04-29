@@ -1,27 +1,27 @@
 # Open Headless Integration Platform (OHIP) 🚀
 
-**Enterprise Integration Without Vendor Lock-In.** OHIP nie jest po prostu "kolejnym narzędziem integracyjnym". To kompletny i gotowy do wdrożenia **Productized Enterprise Integration Operating Model**. Platforma została zaprojektowana jako otwarta, oparta o Apache Camel alternatywa dla klasycznych rozwiązań iPaaS/ESB (takich jak MuleSoft, Boomi czy TIBCO).
+**Enterprise Integration Without Vendor Lock-In.** OHIP is not just "another integration tool." It is a complete, ready-to-deploy **Productized Enterprise Integration Operating Model**. The platform was designed as an open, Apache Camel-based alternative to traditional iPaaS/ESB solutions (such as MuleSoft, Boomi, or TIBCO).
 
-Dzięki OHIP organizacje nie muszą budować architektury integracyjnej od zera — wdrażają sprawdzony standard operacyjny wolny od uzależnienia od zamkniętych ekosystemów.
+With OHIP, organizations don't have to build their integration architecture from scratch — they implement a proven operating standard free from dependency on closed ecosystems.
 
-## 💡 Rozwiązywany problem
+## 💡 The Problem We Solve
 
-Współczesne organizacje często mierzą się z systemowymi silosami, brakiem standaryzacji (observability i governance) oraz wysokimi kosztami utrzymania integracji point-to-point. Klasyczne platformy integracyjne rozwiązują te problemy, ale wprowadzają nowe: bardzo wysokie koszty licencji oraz uzależnienie od jednego dostawcy (vendor lock-in).
+Modern organizations often face system silos, a lack of standardization (observability and governance), and the high cost of maintaining point-to-point integrations. Classic integration platforms solve these issues but introduce new ones: extremely high licensing costs and dependency on a single provider (vendor lock-in).
 
-OHIP eliminuje te bariery, pozwalając na drastyczne skrócenie czasu wdrożenia integracji klasy enterprise (time-to-production) z 6–12 miesięcy do zaledwie 2–6 tygodni.
+OHIP eliminates these barriers, allowing for a drastic reduction in the time-to-production for enterprise-grade integrations.
 
-## 🏗️ Główne założenia platformy
+## 🏗️ Core Architecture Principles
 
-Platforma OHIP funkcjonuje jako **Headless Integration Platform**. Oznacza to, że:
+The OHIP platform functions as a **Headless Integration Platform**. This means:
 
-* Systemy komunikują się ze sobą natywnie poprzez API, event streaming oraz messaging, a nie przez zamknięty system vendora.
-* Dostarczamy gotowe, wielowarstwowe środowisko: od wbudowanego Infrastructure as Code, przez API management, po security baseline i observability.
-* Architektura wspiera każde środowisko uruchomieniowe: on-premise, public cloud, private cloud oraz hybrid/multi-cloud.
-* Całość projektowana jest zgodnie z zasadami API-first, event-driven oraz security by design.
+* Systems communicate natively via API, event streaming, and messaging, rather than through a closed vendor system.
+* We provide a complete, multi-layer environment: from built-in Infrastructure as Code to API management, security baselines, and observability.
+* The architecture supports every runtime environment: on-premise, public cloud, private cloud, and hybrid/multi-cloud.
+* The entire platform is designed according to API-first, event-driven, and security-by-design principles.
 
-## 🚀 Dlaczego warto?
+## 🚀 Why Choose OHIP?
 
-Wybierając OHIP, nie kupujesz samej technologii. Kupujesz powtarzalny standard operacyjny, szybkość wdrożenia, wbudowane bezpieczeństwo i pełną niezależność od vendora. To **Enterprise Integration Without Vendor Prison**.
+By choosing OHIP, you are not just buying technology. You are acquiring a repeatable operating standard, speed of deployment, built-in security, and full vendor independence. This is **Enterprise Integration Without Vendor Prison**.
 
 ---
-*Dokumentacja techniczna, szczegóły poszczególnych warstw oraz standardy architektoniczne pojawią się w tym repozytorium wkrótce.*
+*Technical documentation, details of specific layers, and architectural standards will appear in this repository soon.*
