@@ -14,7 +14,7 @@ OCIP enforces an "Opinionated but Extensible" architecture based on the 80/20 ru
 Total architectural freedom ("composable architecture") inevitably leads to chaos, unmaintainable infrastructure, broken governance, and exponentially increasing support costs. By locking down the operational standard while providing controlled escape hatches for specific infrastructure components, the platform scales efficiently across multiple tenants and business units.
 
 ### Implications
-* Customization is allowed exclusively through predefined contracts and adapter frameworks, never through direct modification of the platform core.
+* Customization is allowed exclusively through predefined contracts and native **Component Swaps**, rejecting the use of proprietary SDKs, and never through direct modification of the platform core.
 * The platform provides a "Golden Path" with officially supported profiles; deviations from these profiles downgrade the support SLA.
 
 ---
@@ -25,13 +25,13 @@ To safely manage extensibility, every component within the OCIP ecosystem is str
 
 ### Tier A: Non-Negotiable Core (Platform as a Product)
 These components define the OCIP operating model and cannot be replaced or bypassed by the client under any circumstances.
-* **Included Components:** Governance model, GitOps deployment model (ArgoCD), observability contracts, security baselines, API standards, CI/CD conventions, and the platform operating model.
+* **Included Components:** Governance model, GitOps deployment model (ArgoCD), observability contracts, security baselines, API standards, CI/CD conventions, and the platform operating model
 * **Rule:** Modifying Tier A components breaks the platform contract and instantly voids operational support guarantees.
 
 ### Tier B: Replaceable Infrastructure Components
 These are the underlying execution engines and storage mechanisms. Clients may replace these with their own corporate standards, provided the replacements fulfill the strict OCIP integration contracts.
 * **Included Components:** Message brokers (e.g., Kafka), API Gateways (e.g., APISIX/Kong), Identity Providers (e.g., Keycloak), Secrets Management (e.g., Vault), and Monitoring Stacks (e.g., Prometheus).
-* **Rule:** Tier B replacements require mapping via the platform's Adapter Framework (e.g., Message Broker Adapter, Identity Provider Adapter).
+* **Rule:** Tier B replacements are executed as a **Component Swap** rather than an adapter development project. The deployment team simply updates the declarative Infrastructure as Code (IaC) templates to use the target system's native component.
 
 ### Tier C: Customer-Owned Extensions
 This tier belongs entirely to the domain teams (the users of the platform). It contains the actual business implementations built on top of OCIP.
@@ -51,7 +51,7 @@ The default, opinionated out-of-the-box experience using the full OCIP open-sour
 
 ### Profile B: Enterprise Hybrid
 Combines the OCIP core (Control Plane) with existing enterprise assets replacing Tier B components (e.g., client IAM + client broker + platform governance).
-* **Operational Impact:** Requires custom adapter maintenance and joint troubleshooting during incidents.
+* **Operational Impact:** Requires the client to assume maintenance for the swapped infrastructure and participate in joint troubleshooting during incidents.
 * **Commercial Impact:** Subject to a higher pricing tier due to the increased complexity of support and integration.
 
 ### Profile C: Regulated Environment
@@ -71,7 +71,7 @@ To protect the platform from becoming a custom consulting project, OCIP establis
 ### Support Level Definitions
 
 1. **Supported:** The platform provides native integration, automated provisioning, and the OCIP Platform Team guarantees Service Level Agreements (SLA).
-2. **Compatible:** The third-party component fulfills the OCIP integration contracts, but the client is responsible for building and maintaining the adapter framework. Best-effort support is provided for platform reachability.
+2. **Compatible:** The third-party component fulfills the OCIP integration contracts. The client executes a **Component Swap** via native reconfigurations, assuming operational responsibility for their physical infrastructure (e.g., maintaining the corporate IAM or broker). Best-effort support is provided for platform reachability.
 3. **Unsupported:** The component violates fundamental OCIP contracts and its deployment is blocked by platform governance.
 
 ### Component Support Matrix
@@ -80,16 +80,15 @@ To protect the platform from becoming a custom consulting project, OCIP establis
 | :--- | :--- | :--- | :--- |
 | **Event Backbone** | Apache Kafka | **Supported** | OCIP provides full IaC, monitoring, and SLA. |
 | **Event Backbone** | RabbitMQ | **Supported** | OCIP provides full IaC, monitoring, and SLA. |
-| **Event Backbone** | Corporate Broker (e.g., IBM MQ) | **Compatible** | Client implements the Adapter Framework; assumes maintenance. |
+| **Event Backbone** | Corporate Broker (e.g., IBM MQ) | **Compatible** | **Component Swap.** Client reconfigures IaC templates; assumes infrastructure maintenance. |
 | **Event Backbone** | Legacy FTP Queues | **Unsupported** | Violates async contracts; deployment blocked. |
 | **API Management** | Apache APISIX | **Supported** | Native integration managed by OCIP. |
 | **API Management** | Kong OSS | **Supported** | Native integration managed by OCIP. |
-| **API Management** | Client-Owned Gateway | **Compatible** | Client implements the API Gateway Adapter. |
+| **API Management** | Client-Owned Gateway | **Compatible** | **Component Swap.** Client reconfigures routing IaC; assumes infrastructure maintenance. |
 | **Identity & Access** | Keycloak | **Supported** | Native RBAC/OIDC integration managed by OCIP. |
-| **Identity & Access** | Corporate IAM (e.g., Entra ID) | **Compatible** | Client implements Identity Provider Adapter and role mapping. |
+| **Identity & Access** | Corporate IAM (e.g., Entra ID) | **Compatible** | **Component Swap.** Client manages OIDC/SAML federation and role mapping. |
 | **Secrets Management** | HashiCorp Vault | **Supported** | Native integration managed by OCIP. |
-| **Secrets Management** | Client Secrets Manager | **Compatible** | Client implements Secret Provider Adapter. |
+| **Secrets Management** | Client Secrets Manager | **Compatible** | **Component Swap.** Client configures native external-secrets integration. |
 | **Observability** | Prometheus Stack | **Supported** | Native integration; full dashboards and alerting. |
-| **Observability** | Client Monitoring Stack | **Compatible** | Client implements Monitoring Provider Adapter. |
+| **Observability** | Client Monitoring Stack | **Compatible** | **Component Swap.** Client configures standard exporters to their stack. |
 | **Deployment Tooling** | ArgoCD | **Supported** | Native GitOps engine; OCIP provides deployment governance. |
-| **Deployment Tooling** | Internal CI/CD Tooling | **Compatible** | Client manages deployments using OCIP CLI/APIs. |
