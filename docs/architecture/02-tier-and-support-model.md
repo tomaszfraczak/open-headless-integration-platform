@@ -11,11 +11,11 @@ This document defines the composability boundaries of the Open Composable Integr
 OCIP enforces an "Opinionated but Extensible" architecture based on the 80/20 rule: 80% of the platform consists of an opinionated, non-negotiable standard, while 20% allows for controlled customization and component replacement.
 
 ### Rationale
-Total architectural freedom ("composable chaos") inevitably leads to unmaintainable infrastructure, broken governance, and exponentially increasing support costs. By locking down the operational standard (the 80%) while providing controlled escape hatches for specific integrations and infrastructure (the 20%), the platform scales efficiently across multiple tenants and business units.
+Total architectural freedom ("composable architecture") inevitably leads to chaos, unmaintainable infrastructure, broken governance, and exponentially increasing support costs. By locking down the operational standard while providing controlled escape hatches for specific infrastructure components, the platform scales efficiently across multiple tenants and business units.
 
 ### Implications
-* Customization is allowed exclusively through predefined adapter frameworks and contracts, never through direct modification of the platform core.
-* The platform provides a "Golden Path" with officially supported profiles; deviations from these profiles downgrade the support SLA from "Supported" to "Compatible" or "Unsupported".
+* Customization is allowed exclusively through predefined contracts and adapter frameworks, never through direct modification of the platform core.
+* The platform provides a "Golden Path" with officially supported profiles; deviations from these profiles downgrade the support SLA.
 
 ---
 
@@ -29,67 +29,67 @@ These components define the OCIP operating model and cannot be replaced or bypas
 * **Rule:** Modifying Tier A components breaks the platform contract and instantly voids operational support guarantees.
 
 ### Tier B: Replaceable Infrastructure Components
-These are the underlying execution engines and storage mechanisms. Clients may replace these with their own corporate standards, provided the replacements fulfill the strict OCIP integration contracts (e.g., the *Event Backbone Contract*).
-* **Included Components:** 
-  * Message Broker: Kafka ↔ corporate broker (e.g., IBM MQ).
-  * API Gateway: APISIX/Kong ↔ client gateway.
-  * Identity Provider: Keycloak ↔ corporate IAM (e.g., Azure AD).
-  * Secrets Management: HashiCorp Vault ↔ client secrets manager.
-* **Rule:** Tier B replacements require mapping via the platform's Adapter Framework.
+These are the underlying execution engines and storage mechanisms. Clients may replace these with their own corporate standards, provided the replacements fulfill the strict OCIP integration contracts.
+* **Included Components:** Message brokers (e.g., Kafka), API Gateways (e.g., APISIX/Kong), Identity Providers (e.g., Keycloak), Secrets Management (e.g., Vault), and Monitoring Stacks (e.g., Prometheus).
+* **Rule:** Tier B replacements require mapping via the platform's Adapter Framework (e.g., Message Broker Adapter, Identity Provider Adapter).
 
 ### Tier C: Customer-Owned Extensions
 This tier belongs entirely to the domain teams (the users of the platform). It contains the actual business implementations built on top of OCIP.
-* **Included Components:** Custom connectors, business domain logic, industry-specific workflows, and data transformations (e.g., Quarkus microservices and Camel routes).
-* **Rule:** The platform guarantees the *execution* and *observability* of Tier C assets, but the business logic itself is owned and maintained by the client.
+* **Included Components:** Custom connectors, domain logic, industry-specific workflows, custom flows, and compliance-specific additions.
+* **Rule:** The platform guarantees the execution and observability of Tier C assets, but the business logic itself is owned and maintained by the client.
 
 ---
 
 ## 3. Supported Reference Profiles and Commercial Impact
 
-Instead of attempting to support infinite combinations of tools, OCIP categorizes deployments into officially supported profiles. Crucially, the level of architectural flexibility chosen by the client directly impacts the commercial model, operational complexity, and time-to-production. Greater deviation from the standard equals higher operational cost.
+Instead of attempting to support infinite combinations of tools, OCIP categorizes deployments into officially supported profiles. The level of architectural flexibility chosen directly impacts the commercial model, operational complexity, and time-to-production.
 
-### Profile A: Standard OSS Baseline (Highly Recommended)
-The default, opinionated out-of-the-box experience using the full OCIP open-source stack (Kafka, Keycloak, Vault, APISIX).
+### Profile A: Full OSS Stack
+The default, opinionated out-of-the-box experience using the full OCIP open-source stack (Kafka + Keycloak + Vault + APISIX).
 * **Operational Impact:** Fastest time-to-production, lowest maintenance overhead, and seamless automated upgrades.
-* **Commercial Impact:** Most cost-effective profile, included in the standard platform subscription.
+* **Commercial Impact:** Most cost-effective profile.
 
 ### Profile B: Enterprise Hybrid
-Combines the OCIP core (Control Plane) with existing enterprise assets replacing Tier B components (e.g., integrating the client's corporate IAM or an existing corporate message broker like IBM MQ).
-* **Operational Impact:** Requires network peering, custom adapter maintenance, and joint troubleshooting during incidents.
-* **Commercial Impact:** Subject to a premium pricing tier due to the increased complexity of support and integration.
+Combines the OCIP core (Control Plane) with existing enterprise assets replacing Tier B components (e.g., client IAM + client broker + platform governance).
+* **Operational Impact:** Requires custom adapter maintenance and joint troubleshooting during incidents.
+* **Commercial Impact:** Subject to a higher pricing tier due to the increased complexity of support and integration.
 
-### Profile C: Regulated & Air-Gapped Environment
-A highly restricted profile designed for environments with extreme compliance requirements, operating entirely on-premise without external internet access.
-* **Operational Impact:** Prevents the use of standard SaaS observability tools. Requires dedicated, isolated deployment pipelines and manual updates.
-* **Commercial Impact:** Custom enterprise pricing model.
+### Profile C: Regulated Environment
+A highly restricted profile designed for environments with extreme compliance requirements, operating entirely air-gapped and on-premise.
+* **Operational Impact:** Audit-heavy environments requiring dedicated, isolated deployment pipelines.
+
+### Profile D: Cloud Native
+Replaces OSS infrastructure with managed cloud services alongside Kubernetes-native delivery.
+* **Operational Impact:** Offloads infrastructure maintenance to the cloud vendor while keeping the OCIP Control Plane intact.
 
 ---
 
 ## 4. Official Support Matrix Definitions
 
-To protect the platform from becoming a chaotic consulting project, OCIP establishes brutal clarity regarding what is supported, what is merely compatible, and what is strictly prohibited. 
+To protect the platform from becoming a custom consulting project, OCIP establishes brutal clarity regarding what is supported, what is compatible, and what is strictly prohibited.
 
 ### Support Level Definitions
 
-1. **Supported (Out-of-the-Box):**
-   * The platform provides native Infrastructure as Code (IaC) provisioning for this component.
-   * The OCIP Platform Team maintains the integration adapter, guarantees Service Level Agreements (SLA), and actively monitors the component's health.
+1. **Supported:** The platform provides native integration, automated provisioning, and the OCIP Platform Team guarantees Service Level Agreements (SLA).
+2. **Compatible:** The third-party component fulfills the OCIP integration contracts, but the client is responsible for building and maintaining the adapter framework. Best-effort support is provided for platform reachability.
+3. **Unsupported:** The component violates fundamental OCIP contracts and its deployment is blocked by platform governance.
 
-2. **Compatible (Bring Your Own Integration):**
-   * The third-party component technically fulfills the OCIP integration contracts (e.g., it supports async pub/sub and DLQ).
-   * **Crucial Boundary:** The client or a system integrator is fully responsible for building, configuring, and maintaining the adapter framework. The OCIP Platform Team will guarantee that the platform can send/receive data via the contract, but will not troubleshoot the internal workings of the compatible component.
-
-3. **Unsupported (Prohibited):**
-   * The component violates fundamental OCIP contracts (e.g., a legacy FTP queue that does not support replayability or dead-letter handling).
-   * The platform's automated governance policies will block the deployment of any unsupported component to protect ecosystem stability.
-
-### Component Support Matrix (Example)
+### Component Support Matrix
 
 | Component Category | Technology / Vendor | Status | Support Boundary & Ownership |
 | :--- | :--- | :--- | :--- |
 | **Event Backbone** | Apache Kafka | **Supported** | OCIP provides full IaC, monitoring, and SLA. |
 | **Event Backbone** | RabbitMQ | **Supported** | OCIP provides full IaC, monitoring, and SLA. |
-| **Event Backbone** | IBM MQ | **Compatible** | Client maintains the custom adapter framework. |
-| **Event Backbone** | Legacy FTP Queues | **Unsupported** | Lacks async contracts; deployment blocked. |
-| **Identity / IAM** | Keycloak | **Supported** | Native RBAC/OIDC integration managed by OCIP. |
-| **Identity / IAM** | Custom Corporate Active Directory | **Compatible** | Client maps roles to OCIP RBAC contracts. |
+| **Event Backbone** | Corporate Broker (e.g., IBM MQ) | **Compatible** | Client implements the Adapter Framework; assumes maintenance. |
+| **Event Backbone** | Legacy FTP Queues | **Unsupported** | Violates async contracts; deployment blocked. |
+| **API Management** | Apache APISIX | **Supported** | Native integration managed by OCIP. |
+| **API Management** | Kong OSS | **Supported** | Native integration managed by OCIP. |
+| **API Management** | Client-Owned Gateway | **Compatible** | Client implements the API Gateway Adapter. |
+| **Identity & Access** | Keycloak | **Supported** | Native RBAC/OIDC integration managed by OCIP. |
+| **Identity & Access** | Corporate IAM (e.g., Entra ID) | **Compatible** | Client implements Identity Provider Adapter and role mapping. |
+| **Secrets Management** | HashiCorp Vault | **Supported** | Native integration managed by OCIP. |
+| **Secrets Management** | Client Secrets Manager | **Compatible** | Client implements Secret Provider Adapter. |
+| **Observability** | Prometheus Stack | **Supported** | Native integration; full dashboards and alerting. |
+| **Observability** | Client Monitoring Stack | **Compatible** | Client implements Monitoring Provider Adapter. |
+| **Deployment Tooling** | ArgoCD | **Supported** | Native GitOps engine; OCIP provides deployment governance. |
+| **Deployment Tooling** | Internal CI/CD Tooling | **Compatible** | Client manages deployments using OCIP CLI/APIs. |
