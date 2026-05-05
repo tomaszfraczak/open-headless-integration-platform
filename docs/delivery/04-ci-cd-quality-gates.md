@@ -1,7 +1,7 @@
 # OCIP: CI/CD Quality Gates and Pipeline Standards
 
 ## Document Purpose
-This document defines the mandatory automated CI/CD pipeline stages and Quality Gates for the Open Composable Integration Platform (OCIP). To ensure delivery scalability and prevent human bottlenecks[cite: 2], all Tier C (Customer-Owned) extensions[cite: 1, 3] must pass strict automated validation before being deployed to the platform via the GitOps workflow.
+This document defines the mandatory automated CI/CD pipeline stages and Quality Gates for the Open Composable Integration Platform (OCIP). To ensure delivery scalability and prevent human bottlenecks, all Tier C (Customer-Owned) extensions must pass strict automated validation before being deployed to the platform via the GitOps workflow.
 
 ---
 
@@ -11,11 +11,11 @@ This document defines the mandatory automated CI/CD pipeline stages and Quality 
 OCIP enforces a "Shift-Left" approach to security, compliance, and architectural governance. Every integration standard defined in the platform documentation must be automatically verifiable within the Continuous Integration (CI) pipeline.
 
 ### Rationale
-Manual code reviews are error-prone and do not scale across hundreds of integrations and domain teams. By automating architectural checks (e.g., verifying if health probes exist, or if APIs match their contracts), the platform ensures ironclad enterprise governance without causing a bureaucracy explosion[cite: 2].
+Manual code reviews are error-prone and do not scale across hundreds of integrations and domain teams. By automating architectural checks (e.g., verifying if health probes exist, or if APIs match their contracts), the platform ensures ironclad enterprise governance without causing a bureaucracy explosion.
 
 ### Implications
 * A Pull Request (PR) cannot be merged if any Quality Gate fails.
-* The CI pipeline is centrally managed and provided by the OCIP Platform Team as part of the "Golden Path" repository templates[cite: 1, 2]. Domain teams consume these pipelines but cannot bypass or alter the core validation steps.
+* The CI pipeline is centrally managed and provided by the OCIP Platform Team as part of the "Golden Path" repository templates. Domain teams consume these pipelines but cannot bypass or alter the core validation steps.
 
 ---
 
@@ -61,4 +61,4 @@ The pipeline builds the container image and tags it with an immutable version (e
 ### The GitOps Sync
 1. The CI pipeline pushes the immutable container image to the central OCIP Container Registry.
 2. The pipeline automatically updates the corresponding GitOps repository (the repository holding the target cluster state) with the new image tag.
-3. The platform's native GitOps engine (ArgoCD)[cite: 3, 4] detects the change in the Git repository and safely synchronizes the Kubernetes cluster to match the new state, entirely eliminating manual `kubectl` interventions.
+3. The platform's native GitOps engine (ArgoCD) detects the change in the Git repository and safely synchronizes the Kubernetes cluster to match the new state, entirely eliminating manual `kubectl` interventions.
