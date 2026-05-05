@@ -1,4 +1,4 @@
-# OCIP: Integration Patterns and Thin Routes
+# OCIP: Integration Patterns
 
 ## Document Purpose
 This document defines the mandatory coding standards and architectural patterns for all Tier C (Customer-Owned) integrations built on the Open Composable Integration Platform (OCIP). It ensures that domain teams produce maintainable, testable, and resilient integration services that align with the platform's distributed, stateless nature.
