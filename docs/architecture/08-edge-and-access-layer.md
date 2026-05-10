@@ -1,44 +1,28 @@
 # Edge and Access Layer Standards
 
 ## Document Purpose
-This document defines the standards for the entry point of the Platform. The Edge and Access Layer (Tier B) is responsible for traffic routing, edge security, and protocol mediation for all incoming synchronous requests.
+This document defines the standards for the entry point of the Platform. The Edge Layer (Tier B) is responsible for traffic routing, edge security, and protocol mediation.
 
 ---
 
 ## 1. Edge Gateway Architecture (Tier B)
 
-The Edge Layer acts as the "Front Door" of the Platform. It centralizes cross-cutting concerns that would otherwise pollute individual integration routes.
-
-### Primary Responsibilities:
-* **SSL Termination:** Handling certificates and encryption at the edge.
-* **API Gateway Functions:** Routing, rate limiting, and request transformation.
-* **Edge Security:** Protecting internal workloads from DDoS, SQL injection, and unauthorized access.
+The Edge Layer acts as the "Front Door," centralizing cross-cutting concerns like SSL termination, rate limiting, and request transformation.
 
 ---
 
-## 2. Recommended Open Source Stack
+## 2. Multi-Cloud Strategy and Component Swap
 
-The Platform utilizes **Apache APISIX** as the cloud-native API Gateway:
-* **Dynamic Routing:** Real-time configuration changes without restarting the gateway.
-* **Plugin System:** Native support for OIDC authentication, masking, and observability.
-* **Ingress Controller:** Full integration with Kubernetes Ingress resources.
+This layer is interchangeable to fit the target environment's network topology:
 
----
-
-## 3. Multi-Cloud Strategy and Component Swap (Azure)
-
-This layer is highly interchangeable to fit the client's existing network topology:
-
-| Platform Component | Azure Equivalent (Component Swap) |
-| :--- | :--- |
-| **Apache APISIX / Kong** | **Azure API Management (APIM)** |
-| **Ingress NGINX** | **Azure Application Gateway** (with WAF) |
-| **Cert-Manager** | **Azure Key Vault (Certificate integration)** |
+| OSS Component | Azure Equivalent | AWS Equivalent | GCP Equivalent |
+| :--- | :--- | :--- | :--- |
+| **Apache APISIX / Kong** | Azure API Management (APIM) | AWS API Gateway | Google Cloud API Gateway |
+| **Ingress NGINX** | Azure Application Gateway | AWS ALB / NLB | GCP HTTP(S) Load Balancer |
+| **WAF** | Azure WAF | AWS WAF | Google Cloud Armor |
 
 ---
 
-## 4. Operational Policies
-
-* **Zero-Trust Ingress:** No internal service (Tier C) may expose a public LoadBalancer. All traffic must pass through the Edge Layer for validation.
-* **Rate Limiting:** Every entry point must have a defined burst and average limit to protect the Data Plane.
-* **Observability:** The Edge Layer must propagate `Trace-ID` headers to ensure end-to-end visibility in the **Observability Layer**.
+## 3. Security Policies
+* **Zero-Trust Ingress:** No internal service may expose a public LoadBalancer; all traffic must pass through the Edge Layer.
+* **Rate Limiting:** Mandatory burst and average limits per consumer.
