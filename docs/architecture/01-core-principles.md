@@ -1,7 +1,7 @@
-# OCIP: Core Architecture Principles
+# Core Architecture Principles
 
 ## Document Purpose
-This document defines the foundational architecture principles for the Open Composable Integration Platform (OCIP). These principles represent the non-negotiable core (Tier A) of the platform. They dictate how integration solutions are designed, deployed, and managed, ensuring scalability, resilience, and operational excellence across the enterprise.
+This document defines the foundational architecture principles for the Open Composable Integration Platform. These principles represent the non-negotiable core (Tier A) of the platform. They dictate how integration solutions are designed, deployed, and managed, ensuring scalability, resilience, and operational excellence across the enterprise.
 
 ---
 
@@ -23,7 +23,7 @@ In enterprise integration, mixing business data processing with platform managem
 ## Principle 2: Contract-Based Composability (Replaceable Infrastructure)
 
 ### Statement
-OCIP is built on stable integration contracts rather than hard dependencies on specific vendor technologies or open-source tools.
+The platform is built on stable integration contracts rather than hard dependencies on specific vendor technologies or open-source tools.
 
 ### Rationale
 To truly eliminate vendor lock-in and enable long-term adaptability, the platform must allow for the controlled replacement of underlying infrastructure components (Tier B). If an organization decides to move from Apache Kafka to an existing corporate IBM MQ cluster, the platform must support this transition without requiring a complete rewrite, provided the new component adheres to the established contract.
@@ -38,7 +38,7 @@ To truly eliminate vendor lock-in and enable long-term adaptability, the platfor
 ## Principle 3: Stateless Integration Runtime
 
 ### Statement
-The core integration execution engines (e.g., Apache Camel routes) must remain completely stateless. 
+The core integration execution engines (e.g., Apache Camel routes) must remain completely stateless.
 
 ### Rationale
 Stateful integration components are difficult to scale horizontally, prone to data loss during pod evictions, and complicate disaster recovery. By enforcing a stateless runtime, we ensure that any integration pod can be terminated and recreated instantaneously by Kubernetes without losing business context or disrupting workflows.
@@ -91,3 +91,55 @@ In a distributed, headless integration architecture, operational visibility and 
 ### Implications
 * **Security by Design:** Every entry point must be protected by the API Gateway with mandatory authentication (e.g., OAuth2/OIDC via Keycloak) and secrets must be injected dynamically via Vault (no hardcoded credentials).
 * **Observability by Default:** All integrations will automatically export distributed traces (OpenTelemetry), standardized metrics (Prometheus), and centralized logs (Loki) without requiring custom code from the integration developer.
+
+---
+
+## Principle 7: Layered Technology Stack and Open Source Tooling
+
+To ensure strict separation of concerns, the Platform is divided into specialized layers utilizing enterprise-grade Open Source products. 
+
+| Layer | Function | Recommended Open Source Product |
+| :--- | :--- | :--- |
+| **Edge / Access Layer** | Entry point, edge security, and API routing. | **Apache APISIX** (or Kong OSS) |
+| **Experience Layer** | Developer Portal, API catalog, and documentation (OAS/AsyncAPI). | **Backstage.io** |
+| **Integration Layer** | Mediation engine, data transformation, and business routing. | **Apache Camel (Kamel)** |
+| **Processing Layer** | Runtime for microservices requiring high performance. | **Quarkus** |
+| **Event / Messaging Layer** | Asynchronous data backbone (Event Backbone). | **Apache Kafka (Strimzi)** |
+| **Security & Identity** | Single Sign-On (SSO), RBAC, and secrets management. | **Keycloak** & **HashiCorp Vault** |
+| **Persistence Layer** | State storage, caching, and operational data. | **PostgreSQL** & **Redis** |
+| **Registry & Artifacts** | Storage for container images and software packages. | **Harbor (Container Registry)** |
+| **Automation / CI/CD** | GitOps and continuous software delivery. | **ArgoCD** & **Tekton** |
+| **Observability Layer** | Monitoring, log aggregation, and distributed tracing. | **Prometheus, Grafana, Loki, Tempo** |
+
+### The Container Registry
+* **Platform Container Registry (Harbor):** Serves as the central repository for all container images. Before any image is registered, it undergoes automated scanning (e.g., via Trivy) for vulnerabilities (CVEs). Images with critical security flaws are automatically blocked from being deployed to production environments.
+
+---
+
+## Principle 8: Responsibility Model
+
+The layered architecture enforces a clear **Separation of Concerns**:
+1. **Platform Team (Infrastructure):** This team is responsible for the availability, updates, and security of the "layers" themselves (e.g., ensuring the Kafka cluster is scalable and the API Gateway is secure). They do not interfere with or manage the business logic flowing through these layers.
+2. **Domain Team (Business):** Domain teams focus solely on implementing business logic within the *Integration* and *Processing* layers. They consume the other platform layers as out-of-the-box services (Service-as-a-Product).
+3. **Swapability:** By strictly adhering to layers, the organization can swap out a specific layer (e.g., changing the *Edge Layer* provider) without requiring a rewrite of the microservices living in the *Processing* layer.
+
+---
+
+## Principle 9: Microservices Manifesto
+
+For a microservice to be deployed onto the Platform, it must adhere to the following architectural rules:
+* **Stateless by Design:** A microservice must not store state in the local file system. All state must be offloaded to the *Persistence Layer* (Redis/Postgres).
+* **Protocol Neutrality:** External communication must always route through the API Gateway (REST/gRPC). Internal communication (between domains) should default to the *Event Layer* (Kafka).
+* **Self-Describing:** Every service must expose a `/q/dev` (or equivalent) endpoint returning its current OpenAPI/AsyncAPI specification.
+* **Observability First:** The use of standard print commands (e.g., `System.out.println`) is strictly prohibited. Logging must occur in structured JSON format to `stdout` and must always include a unique `Trace-ID`.
+* **Sidecar Friendly:** The application architecture must allow for infrastructure and monitoring agents (e.g., OpenTelemetry agents) to be injected without modifying the source code.
+
+---
+
+## Principle 10: Naming Conventions
+
+Uniformity is the foundation of GitOps automation. The platform enforces the following conventions:
+* **Namespaces:** `platform-[domain]-[env]` (e.g., `platform-finance-prod`).
+* **Container Images:** `registry.platform.io/[domain]/[service-name]:[tag]` (The image tag must always be the Git Commit SHA).
+* **Git Repositories:** `platform-[domain]-[service-type]-src` (for source code) and `platform-[domain]-gitops` (for deployment manifests).
+* **Kafka Topics:** Follow the pattern `[domain].[entity].[event-type].[version]` (e.g., `finance.invoice.created.v1`).

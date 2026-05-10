@@ -1,20 +1,20 @@
-# OCIP: API and Event Policy Governance
+# API and Event Policy Governance
 
 ## Document Purpose
-This document defines the centralized policy enforcement model for the Open Composable Integration Platform (OCIP). By offloading cross-cutting concerns—such as security, traffic shaping, and monitoring—to the Platform Control Plane (API Gateway and Mesh), OCIP ensures consistent governance across all integrations while keeping Tier C business logic "thin" and focused.
+This document defines the centralized policy enforcement model for the Platform. By offloading cross-cutting concerns—such as security, traffic shaping, and monitoring—to the Platform Control Plane (API Gateway and Mesh), the platform ensures consistent governance across all integrations while keeping Tier C business logic "thin" and focused.
 
 ---
 
 ## 1. Centralized Policy Enforcement
 
 ### Statement
-Cross-cutting integration concerns must be enforced at the platform level (Control Plane) rather than being hardcoded into individual integration routes.
+Cross-cutting integration concerns must be enforced at the platform level (Control Plane) rather than being hardcoded into individual integration routes. This enforces the Responsibility Model by keeping the **Integration Layer** decoupled from infrastructure rules.
 
 ### Rationale
 Managing security, rate limiting, and logging logic within hundreds of individual Camel routes is an operational nightmare. It leads to inconsistent security postures and makes it impossible to update global policies without redeploying every service. Centralizing these policies at the API Gateway (for sync traffic) and the Event Backbone (for async traffic) ensures architectural integrity and operational agility.
 
 ### Implications
-* **Zero-Trust Security:** No integration pod should trust an incoming request that has not been pre-validated by the platform's entry points.
+* **Zero-Trust Security:** No integration pod should trust an incoming request that has not been pre-validated by the platform's entry points (**Edge / Access Layer**).
 * **Separation of Duties:** Domain teams focus on "what" the integration does; the Platform Team defines "how" it is protected and throttled.
 
 ---
@@ -34,7 +34,7 @@ All exposed APIs and event consumers must have explicit traffic shaping policies
 ## 3. Security and Identity Policy
 
 ### Statement
-All communication within OCIP must be authenticated and authorized using centralized identity standards.
+All communication within the platform must be authenticated and authorized using centralized identity standards managed within the **Security & Identity Layer**.
 
 ### Execution
 * **Authentication (Who are you?):** All incoming API traffic must present a valid JWT (JSON Web Token) issued by the platform's Identity Provider (Tier B - e.g., Keycloak). The API Gateway is responsible for validating the signature, issuer, and expiration of the token.
@@ -46,9 +46,9 @@ All communication within OCIP must be authenticated and authorized using central
 ## 4. Observability and Auditing Policies
 
 ### Statement
-Every interaction with the platform must leave an immutable audit trail for compliance and troubleshooting.
+Every interaction with the platform must leave an immutable audit trail for compliance and troubleshooting, managed by the **Observability Layer**.
 
 ### Execution
 * **Access Logging:** The API Gateway automatically logs metadata for every request (Source IP, Latency, Status Code, Consumer ID).
 * **Distributed Tracing Enforcement:** The platform automatically injects and propagates W3C Trace Context headers (Traceparent). Any Tier C extension must preserve these headers to ensure the full request path is visible in the observability stack.
-* **Policy Auditing:** Changes to policies (e.g., changing a rate limit) are managed via GitOps. The Git history serves as the primary audit trail for who changed which policy and when.
+* **Policy Auditing:** Changes to policies (e.g., changing a rate limit) are managed via GitOps (**Automation / CI/CD Layer**). The Git history serves as the primary audit trail for who changed which policy and when.

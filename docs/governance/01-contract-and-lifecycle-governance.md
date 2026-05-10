@@ -1,7 +1,7 @@
-# OCIP: Contract and Lifecycle Governance
+# Contract and Lifecycle Governance
 
 ## Document Purpose
-This document establishes the governance model for the creation, versioning, and lifecycle management of all integration contracts (APIs and Event Streams) on the Open Composable Integration Platform (OCIP). Strict lifecycle governance prevents the proliferation of undocumented, unmaintained, and permanently legacy integrations, ensuring long-term platform agility.
+This document establishes the governance model for the creation, versioning, and lifecycle management of all integration contracts (APIs and Event Streams) on the Platform. Strict lifecycle governance prevents the proliferation of undocumented, unmaintained, and permanently legacy integrations, ensuring long-term platform agility.
 
 ---
 
@@ -16,7 +16,8 @@ In a decentralized, composable architecture, domain teams must rely on the stabi
 ### Execution
 * **Synchronous Interfaces:** Must be defined using the **OpenAPI Specification (OAS)**.
 * **Asynchronous Interfaces:** Must be defined using the **AsyncAPI Specification**.
-* **Git Repository as Registry:** These specifications must be committed to the designated central Git repository. The CI/CD pipelines will automatically publish these contracts to the platform's API/Event Developer Portal or documentation hub.
+* **Git Repository as Registry:** These specifications must be committed to the designated central Git repository. The CI/CD pipelines will automatically publish these contracts to the platform's API/Event Developer Portal (managed within the **Experience Layer** via tools like Backstage.io) or documentation hub.
+* **Self-Describing Manifest:** Aligning with the Microservices Manifesto, the running service must expose these exact specifications via a dedicated endpoint (e.g., `/q/dev`).
 
 ---
 
@@ -32,13 +33,13 @@ Consumers of an API or event stream need absolute predictability. They must know
 * **MAJOR (e.g., v1 to v2):** Introduced only for breaking changes (e.g., removing a mandatory field, changing a data type, modifying the URI structure). Major versions must be exposed as distinct endpoints (e.g., `/api/v1/orders` vs. `/api/v2/orders`).
 * **MINOR (e.g., v1.1 to v1.2):** Introduced for backward-compatible additions (e.g., adding a new optional field to a JSON payload or a new endpoint).
 * **PATCH (e.g., v1.1.0 to v1.1.1):** Introduced for backward-compatible bug fixes within the integration logic that do not affect the contract interface.
-* **Event Streams:** For Kafka/RabbitMQ topics, a major breaking change requires publishing to an entirely new topic (e.g., `domain.entity.event.v2`).
+* **Event Streams:** For Kafka/RabbitMQ topics, a major breaking change requires publishing to an entirely new topic (e.g., `[domain].[entity].[event-type].v2` following the platform naming conventions).
 
 ---
 
 ## 3. The Contract Lifecycle Stages
 
-Every integration endpoint and event topic published on OCIP must operate within one of the following explicitly defined lifecycle stages:
+Every integration endpoint and event topic published on the platform must operate within one of the following explicitly defined lifecycle stages:
 
 1. **Draft:** The contract is being designed and negotiated. No production deployment exists.
 2. **Active:** The contract is live in production. It is the recommended version for all new consumers. Full SLA applies.
@@ -50,7 +51,7 @@ Every integration endpoint and event topic published on OCIP must operate within
 ## 4. The Deprecation and Sunset Policy
 
 ### Statement
-OCIP enforces a strict "Sunset Policy" to force the retirement of legacy integrations. The Platform Team will not support multiple legacy versions of the same integration indefinitely.
+The platform enforces a strict "Sunset Policy" to force the retirement of legacy integrations. The Platform Team will not support multiple legacy versions of the same integration indefinitely.
 
 ### Rationale
 Without a forced sunset policy, domain teams will never migrate to newer versions, forcing the platform to maintain legacy code, outdated security protocols, and redundant compute resources. This directly degrades the platform's ROI and operational scalability.

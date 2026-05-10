@@ -1,7 +1,7 @@
-# OCIP: Alerting and Incident Response Model
+# Alerting and Incident Response Model
 
 ## Document Purpose
-This document defines how the Open Composable Integration Platform (OCIP) detects anomalies, routes notifications, and manages incident response. The goal is to ensure rapid resolution of failures while preventing "alert fatigue" through strict routing rules and actionable notifications.
+This document defines how the platform detects anomalies, routes notifications, and manages incident response. The goal is to ensure rapid resolution of failures while preventing "alert fatigue" through strict routing rules and actionable notifications.
 
 ---
 
@@ -11,7 +11,7 @@ This document defines how the Open Composable Integration Platform (OCIP) detect
 The platform provides a fully functional, zero-cost alerting mechanism out-of-the-box, while remaining 100% compatible with enterprise incident management tools.
 
 ### Execution
-* **Default OSS Router (Tier B):** OCIP utilizes **Prometheus Alertmanager** as the native, open-source alert routing engine. It evaluates metrics against defined thresholds and groups, silences, and routes notifications.
+* **Default OSS Router (Tier B):** The platform utilizes **Prometheus Alertmanager** within the **Observability Layer** as the native, open-source alert routing engine. It evaluates metrics against defined thresholds and groups, silences, and routes notifications.
 * **Zero-Cost Delivery:** By default, Alertmanager routes notifications to standard corporate communication channels (e.g., MS Teams webhooks, Slack channels, or Email distribution lists).
 * **Enterprise Component Swap:** If a client organization already utilizes paid enterprise Incident Management platforms (e.g., PagerDuty, Atlassian Opsgenie, ServiceNow), they execute a Component Swap. The platform team simply configures Alertmanager to forward categorized alerts to these external systems via standard API webhooks.
 
@@ -20,10 +20,10 @@ The platform provides a fully functional, zero-cost alerting mechanism out-of-th
 ## 2. Alert Routing and Ownership (YBIYRI)
 
 ### Statement
-OCIP strictly enforces the "You Build It, You Run It" (YBIYRI) model. Alerts must be routed exclusively to the team capable of fixing the underlying issue.
+The platform strictly enforces the "You Build It, You Run It" (YBIYRI) model, directly aligning with the **Responsibility Model**. Alerts must be routed exclusively to the team capable of fixing the underlying issue.
 
 ### Execution
-Alert routing is determined dynamically based on the metadata (Kubernetes labels) attached to the failing component:
+Alert routing is determined dynamically based on the metadata (Kubernetes labels and naming conventions like `platform-[domain]-[env]`) attached to the failing component:
 * **Infrastructure Alerts (Platform Team):** Alerts regarding Kafka cluster health, API Gateway latency, or Kubernetes node CPU exhaustion are routed directly to the Platform Engineering on-call rotation.
 * **Domain Integration Alerts (Domain Teams):** If a specific Camel route deployed by the "Finance" team experiences a spike in `HTTP 500` errors, or its Dead Letter Queue (DLQ) overflows, the alert is routed exclusively to the Finance Domain Team's designated channel. The Platform Team is *not* paged for domain-specific logic failures.
 
@@ -32,11 +32,11 @@ Alert routing is determined dynamically based on the metadata (Kubernetes labels
 ## 3. Alerting as Code
 
 ### Statement
-Manual creation of alerts via UI dashboards is strictly prohibited. All alert rules must be version-controlled and auditable.
+Manual creation of alerts via UI dashboards is strictly prohibited. All alert rules must be version-controlled and auditable through the **Automation / CI/CD Layer**.
 
 ### Execution
 * **Declarative Rules:** Alerting thresholds (e.g., `rate(http_requests_total{status="500"}[5m]) > 0.05`) are defined as declarative Kubernetes Custom Resources (`PrometheusRule`).
-* **Golden Path Injection:** When a domain team bootstraps a new integration using the OCIP GitOps templates, baseline alert rules (e.g., Pod CrashLoopBackOff, High Latency) are automatically injected into their repository, ensuring no integration goes to production unmonitored.
+* **Golden Path Injection:** When a domain team bootstraps a new integration using the GitOps templates, baseline alert rules (e.g., Pod CrashLoopBackOff, High Latency) are automatically injected into their repository, ensuring no integration goes to production unmonitored.
 
 ---
 

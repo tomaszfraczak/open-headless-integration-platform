@@ -1,14 +1,14 @@
-# OCIP: Enterprise Scalability and Resilience Model
+# Enterprise Scalability and Resilience Model
 
 ## Document Purpose
-This document outlines the comprehensive scalability and resilience framework for the Open Composable Integration Platform (OCIP). An enterprise integration platform cannot be designed solely for current traffic volumes; it must seamlessly accommodate the exponential growth of integrations, tenants, B2B partners, API consumers, seasonal peaks (e.g., Black Friday), batch spikes, event storms, and multi-region expansion. Without a multi-dimensional scalability model, the integration platform becomes a critical bottleneck for the entire organization.
+This document outlines the comprehensive scalability and resilience framework for the Open Composable Integration Platform. An enterprise integration platform cannot be designed solely for current traffic volumes; it must seamlessly accommodate the exponential growth of integrations, tenants, B2B partners, API consumers, seasonal peaks (e.g., Black Friday), batch spikes, event storms, and multi-region expansion. Without a multi-dimensional scalability model, the integration platform becomes a critical bottleneck for the entire organization.
 
 ---
 
 ## 1. The Multi-Dimensional Scalability Principle
 
 ### Statement
-OCIP defines scalability not merely as the addition of compute resources, but across six distinct dimensions: Horizontal, Connector, Delivery, Operational, Governance, and Business.
+The platform defines scalability not merely as the addition of compute resources, but across six distinct dimensions: Horizontal, Connector, Delivery, Operational, Governance, and Business.
 
 ### Rationale
 Traditional platforms often solve scalability by scaling up hardware (vertical scaling), which leads to exorbitant costs and hard physical limits. Furthermore, technical scalability is insufficient if operational teams and governance processes cannot scale at the same pace. A holistic approach ensures that the platform can support hundreds of parallel integrations and multiple domain teams without a proportional increase in administrative overhead or architectural chaos.
@@ -55,7 +55,7 @@ The platform architecture must support diverse commercial and organizational mod
 
 ## 3. Architectural Resilience Requirements
 
-To support the scalability dimensions outlined above, OCIP enforces strict architectural patterns to guarantee platform availability and data integrity during peak loads or infrastructure failures.
+To support the scalability dimensions outlined above, strict architectural patterns are enforced to guarantee platform availability and data integrity during peak loads or infrastructure failures.
 
 ### Autoscaling by Design
 * The platform utilizes event-driven scaling, backpressure strategies, and queue buffering to absorb traffic spikes without overwhelming target backend systems.
