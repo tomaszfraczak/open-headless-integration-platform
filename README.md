@@ -1,27 +1,44 @@
-# Open Headless Integration Platform (OHIP)
+# Open Enterprise Integration Platform
 
-**Enterprise Integration Without Vendor Lock-In.** OHIP is not just "another integration tool." It is a complete, ready-to-deploy **Productized Enterprise Integration Operating Model**. The platform was designed as an open, Apache Camel-based alternative to traditional iPaaS/ESB solutions (such as MuleSoft, Boomi, or TIBCO).
+**Enterprise Integration Without Vendor Lock-In.** This repository contains the architecture, governance, and delivery standards for a complete, ready-to-deploy **Productized Enterprise Integration Operating Model**. The Platform is designed as an open, composable alternative to traditional, closed iPaaS/ESB solutions (such as MuleSoft, Boomi, or TIBCO).
 
-With OHIP, organizations don't have to build their integration architecture from scratch — they implement a proven operating standard free from dependency on closed ecosystems.
+With this Platform, organizations do not have to build their integration architecture from scratch. Instead, they implement a proven, scalable operating standard that guarantees full freedom from proprietary ecosystems.
 
 ## The Problem We Solve
 
-Modern organizations often face system silos, a lack of standardization (observability and governance), and the high cost of maintaining point-to-point integrations. Classic integration platforms solve these issues but introduce new ones: extremely high licensing costs and dependency on a single provider (vendor lock-in).
+Modern organizations often face system silos, a lack of standardization (observability and governance), and the high cost of maintaining point-to-point integrations. Classic enterprise integration platforms attempt to solve these issues but introduce severe new ones: exorbitant core-based licensing costs, "black box" infrastructure, and deep dependency on a single provider (vendor lock-in).
 
-OHIP eliminates these barriers, allowing for a drastic reduction in the time-to-production for enterprise-grade integrations.
+This Platform eliminates these barriers by utilizing a 100% open-source execution engine and a strict Layered Architecture, allowing for a drastic reduction in time-to-production while maintaining rigorous enterprise compliance.
 
-## Core Architecture Principles
+## The Platform Manifesto: Core Paradigms
 
-The OHIP platform functions as a **Headless Integration Platform**. This means:
+The Platform functions as a **Composable, Headless Integration Platform**. It is built upon the following non-negotiable paradigms:
 
-* Systems communicate natively via API, event streaming, and messaging, rather than through a closed vendor system.
-* We provide a complete, multi-layer environment: from built-in Infrastructure as Code to API management, security baselines, and observability.
-* The architecture supports every runtime environment: on-premise, public cloud, private cloud, and hybrid/multi-cloud.
-* The entire platform is designed according to API-first, event-driven, and security-by-design principles.
+1. **The 80/20 Rule & Tiered Composability:** 80% of the platform enforces a strict, opinionated operating standard (Tier A - The Control Plane). The remaining 20% allows organizations to safely replace infrastructure blocks (Tier B - Component Swap) with their corporate standards (e.g., swapping OSS Kafka for Azure Event Hubs) without rewriting business logic.
+2. **Layered Technology Stack:** The architecture is strictly separated into dedicated layers: *Edge, Experience, Integration, Processing, Event, Persistence, Security, Registry, Automation,* and *Observability*.
+3. **Stateless by Design & Thin Routes:** Integration code (Tier C) is built using standard **Apache Camel** (for routing and mediation) and **Quarkus** (for complex domain processing). All integration pods are entirely stateless and ephemeral.
+4. **GitOps & IaC Delivery:** Manual configuration is strictly prohibited. Every infrastructure change and integration route is deployed declaratively via GitOps (e.g., ArgoCD), treating Git as the absolute Single Source of Truth.
+5. **Native Observability:** Telemetry collection (OpenTelemetry tracing, Prometheus metrics, structured JSON logging) and Zero-Trust security are built-in platform primitives, not optional developer add-ons.
 
-## Why Choose OHIP?
+## Why Choose This Platform?
 
-By choosing OHIP, you are not just buying technology. You are acquiring a repeatable operating standard, speed of deployment, built-in security, and full vendor independence. This is **Enterprise Integration Without Vendor Prison**.
+By adopting this architectural framework, you are not just acquiring a set of open-source tools. You are implementing a **Repeatable Operating Standard**.
+
+* **Zero Vendor Lock-In:** Retain 100% ownership of your integration logic and infrastructure choices.
+* **Golden Path Delivery:** Domain developers bootstrap integrations in minutes using certified templates with pre-configured CI/CD Quality Gates.
+* **Multi-Cloud Readiness:** Deployable on any CNCF-compliant Kubernetes distribution (AKS, EKS, OpenShift, or On-Premise).
+* **Enterprise Governance:** Built-in multi-tenancy isolation, Resource Quotas, and automated Software Bill of Materials (SBOM) generation.
 
 ---
-*Technical documentation, details of specific layers, and architectural standards will appear in this repository soon.*
+
+## Documentation Structure
+
+The documentation in this repository is divided into specific domains. Please refer to the directories below for detailed standards:
+
+* `/architecture` - Core principles, layered infrastructure standards, support models, and component swap guidelines.
+* `/delivery` - Developer onboarding, CI/CD Quality Gates, GitOps workflows, and "Thin Route" coding patterns.
+* `/governance` - Team topologies, multi-tenancy isolation, contract lifecycle (OAS/AsyncAPI), and RBAC identity models.
+* `/operations` - Observability standards, incident response (YBIYRI), disaster recovery, and state management.
+
+---
+*This repository serves as the definitive architectural blueprint. For implementation details, please refer to the specific Layer Standards within the documentation directories.*
